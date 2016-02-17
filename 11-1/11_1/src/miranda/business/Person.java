@@ -1,5 +1,6 @@
 package business;
 
+import ui.Console;
 
 public abstract class Person{
     String first_name;
@@ -13,5 +14,16 @@ public abstract class Person{
     public String getFirst_name(){return first_name;}
     public String getLast_name(){return last_name;}
     public String getEmail_address(){return email_address;}
+
+    @Override
+    public String toString() {
+        return "Name: " + first_name + " " + last_name + "\n" + "Email address: " + email_address;
+    }
+
+    public abstract String getDisplayText();
+
+    public static void print(Person p) {
+        Console.displayLine("You entered:\n" + p.getDisplayText());
+    }
 
 }
