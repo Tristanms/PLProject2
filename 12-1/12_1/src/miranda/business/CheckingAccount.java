@@ -1,21 +1,25 @@
 package business;
 
 
+import java.text.NumberFormat;
+
 public class CheckingAccount extends Account {
 
     double monthlyFee = 1.00;
 
-    void subtractMonthlyFee() {}
-
-    void setMonthlyFee(double monthlyFee) {}
-
-    double getMonthlyFee() {
-
-        return 0;
+    public void subtractMonthlyFee() {
+        this.balance = this.balance - monthlyFee;
     }
 
-    String getMonthlyFeeFormatted() {
+    public void setMonthlyFee(double monthlyFee) {}
 
-        return "a'";
+    public double getMonthlyFee() {
+
+        return 1;
+    }
+
+    public String getMonthlyFeeFormatted() {
+        NumberFormat currency = NumberFormat.getCurrencyInstance();
+        return currency.format(monthlyFee);
     }
 }

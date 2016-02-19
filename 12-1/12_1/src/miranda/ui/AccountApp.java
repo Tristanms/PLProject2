@@ -1,60 +1,61 @@
 package ui;
 
+import business.Account;
+import business.CheckingAccount;
+import business.Transactions;
+
 public class AccountApp {
     public static void main(String[] args) {
 
-        System.out.println("Welcome to the Account Calculator");
-        System.out.println();
+        //Create a Checking Account
+        CheckingAccount acc = new CheckingAccount();
 
+        //Print out intro screen
+        System.out.println("Welcome to the Account Calculator");
+        System.out.println("\nStarting Balance");
+        System.out.println("Checking: " + acc.getBalanceFormatted());
+        System.out.println("\nEnter the transactions for the month");
+
+        //set up stop variables for while loop
         Boolean go = true;
         String choice = "y";
+
+        //continually prompt user for new withdrawl/deposits
         while (choice.equalsIgnoreCase("y") && go) {
             //get input from user
-            String personType = Console.getString("Create customer or employee? (c/e): ");
-            System.out.println();
+            String trans_type = Console.getString("\nWithdraw or deposit? (w/d): ");
+            if (trans_type.equalsIgnoreCase("w") || trans_type.equalsIgnoreCase("d")) {
 
-            if (personType.equalsIgnoreCase("c") || personType.equalsIgnoreCase("e")) {
-                String firstName = Console.getString("Enter first name: ");
-                String lastName = Console.getString("Enter last name: ");
-                String emailAddress = Console.getString("Enter email address: ");
+                //Withdrawl
+                if (trans_type.equalsIgnoreCase("w")) {
+                    double amount = Console.getInt("Amount: ");
+                    while (amount>acc.getBalance()){
+                        System.out.println("\nPlease enter amount less than current account balance");
+                        amount = Console.getInt("Amount: ");
+                    }
+                    Transactions.withdraw(acc, amount);
 
-                if (personType.equalsIgnoreCase("c")) {
-                    String customerNumber = Console.getString("Customer number: ");
-                    System.out.println();
-
-                    Customer c = new Customer();
-                    c.setFirst_name(firstName);
-                    c.setLast_name(lastName);
-                    c.setEmail_address(emailAddress);
-                    c.setCustomer_number(customerNumber);
-
-                    //print out using print() function
-                    Person.print(c);
-                    System.out.println();
-
-                } else if (personType.equalsIgnoreCase("e")) {
-                    String ssn = Console.getString("Social security number: ");
-                    System.out.println();
-
-                    Employee e = new Employee();
-                    e.setFirst_name(firstName);
-                    e.setLast_name(lastName);
-                    e.setEmail_address(emailAddress);
-                    e.setSocial_security(ssn);
-
-                    //print out
-                    Person.print(e);
-                    System.out.println();
-
+                    //Deposit
+                } else if (trans_type.equalsIgnoreCase("d")) {
+                    double amount = Console.getInt("Amount: ");
+                    while (amount > 10000) {
+                        System.out.println("\nEnter a deposit amount less than $10,000");
+                        amount = Console.getInt("Amount: ");
+                    }
+                    Transactions.deposit(acc, amount);
                 }
             }
 
             //check to see if continue
-            String cont = Console.getString("Continue? (y/n): ");
+            String cont = Console.getString("\nContinue? (y/n): ");
+
+            //if not, print out the fees and final balance
             if (cont.equalsIgnoreCase("n")) {
+                System.out.println("\nMonthly Fees\nChecking fee:                 " + acc.getMonthlyFeeFormatted());
+                acc.subtractMonthlyFee();
+                System.out.println("\nFinal Balance\n" + "Checking: " + acc.getBalanceFormatted());
                 go = false;
             } else {
-                System.out.println();
             }
         }
 
